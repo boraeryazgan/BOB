@@ -1,0 +1,27 @@
+{% if messages %}
+ 
+<div class="modal" style="display: block;" id="customAlert">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" id="closeModalButton" class="btn-close"  data-bs-dismiss="modal" aria-label="Close"></button>
+        <script>
+          var closeModalButton = document.getElementById("closeModalButton");
+          var customAlertModal = document.getElementById("customAlert");
+
+          closeModalButton.addEventListener("click", function () {
+            customAlertModal.style.display="none";
+          });
+        </script>      </div>
+      <div class="modal-body">
+        <ul>
+          {% for message in messages %}
+          <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+</div>

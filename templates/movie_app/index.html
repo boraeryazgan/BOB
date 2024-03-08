@@ -1,0 +1,14 @@
+{% extends 'base.html' %}{%load static%}
+{%block content%}
+
+    {% if user.is_authenticated %}
+        <p>Hoş geldiniz, {{ user.username }}</p>
+        <p>{{user.email}}</p>
+        
+
+    {% else %}
+        <p>Lütfen giriş yapın veya kayıt olun.</p>
+        
+
+    {% endif %}
+{%endblock%}

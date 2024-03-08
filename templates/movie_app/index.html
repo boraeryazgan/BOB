@@ -11,4 +11,43 @@
         
 
     {% endif %}
+    <div class="card-container">
+        {% for serie in page_obj %}
+        <div class="card">
+            <img loading="lazy"  class="card-img-top" src="{{ serie.poster_link }}" alt="{{ serie.series_title }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ serie.series_title }}</h5>
+                <p class="card-text">Released Year: {{ serie.released_year }}</p>
+                <p class="card-text">Runtime: {{ serie.runtime }}</p>
+                <p class="card-text">Genre: {{ serie.genre }}</p>
+                <p class="card-text">IMDB Rating: {{ serie.imdb_rating }}</p>
+                
+                <p class="card-text">Overview: {{ serie.overview }}</p>
+                <p class="card-text">Director: {{ serie.director }}</p>
+                <p class="card-text">Stars: {{ serie.star1 }}, {{ serie.star2 }}, {{ serie.star3 }}, {{ serie.star4 }}</p>
+                <p class="card-text">No. of Votes: {{ serie.no_of_votes }}</p>
+                <a href="{{ serie.trailer_url }}" class="btn btn-primary">Watch Trailer</a>
+            </div>
+        </div>
+        
+        {% endfor %}
+    </div>
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; First</a>
+                <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            {% endif %}
+    
+            <span class="current">
+                Sayfa {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+            </span>
+    
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+
 {%endblock%}

@@ -7,12 +7,17 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.sites.shortcuts import get_current_site
 from .forms import LoginForm, SignUpForm
-from django.contrib.auth.decorators import login_required
-
-# Create your models here.
+from django.core.paginator import Paginator
+from .models import TVSeries
 
 def index(request):
-    return render(request, 'movie_app/index.html')
+    series_list = TVSeries.objects.all()
+    paginator = Paginator(series_list, 20) 
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'movie_app/index.html', {'page_obj': page_obj})
 
 def login_view(request):
     if request.method == 'POST':

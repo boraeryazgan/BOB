@@ -10,8 +10,21 @@ from .forms import LoginForm, SignUpForm
 from django.core.paginator import Paginator
 from .models import TVSeries
 
+def detail(request, serie_id):
+    serie = TVSeries.objects.get(pk=serie_id)
+    return render(request, 'movie_app/detail.html', {'serie': serie})
+
 def index(request):
+    sort_by = request.GET.get('sort_by')
+
     series_list = TVSeries.objects.all()
+
+    if sort_by == 'released_year':
+        series_list = series_list.order_by('released_year')
+    elif sort_by == 'imdb_rating':
+        series_list = series_list.order_by('-imdb_rating')
+    elif sort_by == 'no_of_votes':
+        series_list = series_list.order_by('-no_of_votes') 
     paginator = Paginator(series_list, 20) 
 
     page_number = request.GET.get('page')

@@ -13,7 +13,7 @@ class TVSeries(models.Model):
     star3 = models.CharField(max_length=255)
     star4 = models.CharField(max_length=255)
     no_of_votes = models.IntegerField()
-    trailer_url = models.URLField(null=True,default="")
+    trailer_url = models.CharField(null=True,default="",max_length=255)
 
 
     def __str__(self):

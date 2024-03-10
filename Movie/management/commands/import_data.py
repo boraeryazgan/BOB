@@ -29,6 +29,8 @@ class Command(BaseCommand):
                     star2=row['Star2'],
                     star3=row['Star3'],
                     star4=row['Star4'],
-                    no_of_votes=row['No_of_Votes']
+                    no_of_votes=row['No_of_Votes'],
+                    trailer_url=row['trailer_url']
+
                 )
         self.stdout.write(self.style.SUCCESS('Data imported successfully'))

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block title %}Arama Sonuçları | BOB{% endblock %}
+{%block specific_css_multi%}
+<link rel="stylesheet" href="{% static 'movie_app/css/search.css' %}" />
+{%endblock%}
+
+{% block content%}
+<section id="searchPage">
+    {%if query%}
+    <div class="search-results-container">
+      <h1>"{{ query|title }}" için arama sonuçları</h1>
+      <h2>Filmler</h2>
+      <ul>
+        {% for serie in series %}
+        <a href="{% url 'detail' serie.id %}"><li class="film-item">{{ serie.series_title }}
+
+        </li></a>
+        
+        {% empty %}
+        
+        <li class="no-results">İlgili bir film bulunamadı.</li>
+        {% endfor %}
+      </ul>
+      
+      {%else%}
+      <div class="container">
+  <h1 class="noneh1">Aradağınız filmle ilgili anahtar kelimeleri aramayı deneyin. </h1>
+  </div>
+  
+  {%endif%}
+    </div>
+  
+  </section>
+
+{%endblock%}

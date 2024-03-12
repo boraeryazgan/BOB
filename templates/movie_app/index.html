@@ -12,30 +12,16 @@
         
 
     {% endif %}
-    <form method="get">
-        <label for="sorting">Sort by:</label>
-        <select name="sort_by" id="sorting">
-            <option value="default">Default</option>
-            <option value="released_year">Released Year</option>
-            <option value="imdb_rating">IMDB Rating</option>
-            <option value="no_of_votes">No. of Votes</option>
-        </select>
-        <button type="submit">Sort</button>
-    </form>
+    
     <div class="card-container">
         {% for serie in page_obj %}
         <div class="card">
-            <img loading="lazy" class="card-img-top" src="{{ serie.poster_link }}" alt="{{ serie.series_title }}">
+            <img  loading="lazy" class="card-img-top" src="{{ serie.poster_link }}" alt="{{ serie.series_title }}">
             <div class="card-body">
                 <h5 class="card-title">{{ serie.series_title }}</h5>
-                <p class="card-text">Released Year: {{ serie.released_year }}</p>
-                <p class="card-text">Runtime: {{ serie.runtime }}</p>
                 <p class="card-text">Genre: {{ serie.genre }}</p>
                 <p class="card-text">IMDB Rating: {{ serie.imdb_rating }}</p>
                 <p class="card-text">Overview: {{ serie.overview }}</p>
-                <p class="card-text">Director: {{ serie.director }}</p>
-                <p class="card-text">Stars: {{ serie.star1 }}, {{ serie.star2 }}, {{ serie.star3 }}, {{ serie.star4 }}</p>
-                <p class="card-text">No. of Votes: {{ serie.no_of_votes }}</p>
                 <a href="{% url 'detail' serie.id %}" class="btn btn-light btn-watch-trailer">Watch Trailer</a>
             </div>
             <a href="{% url 'detail' serie.id %}" class="link-overlay"></a>

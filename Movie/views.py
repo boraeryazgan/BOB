@@ -1,30 +1,31 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.core.mail import EmailMessage
-from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from django.contrib.sites.shortcuts import get_current_site
 from .forms import LoginForm, SignUpForm
 from django.core.paginator import Paginator
 from .models import TVSeries
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.http import HttpResponse
+from django.template import loader
 
+@ensure_csrf_cookie
+def search(request):
+    query = request.POST.get('q', '')
+
+    if query:
+        series = TVSeries.objects.filter(series_title__icontains=query)  
+        context = {'query': query, 'series': series}
+        template = loader.get_template('movie_app/search.html')
+        return HttpResponse(template.render(context, request))
+    else:
+        return render(request, 'movie_app/search.html')
+    
 def detail(request, serie_id):
     serie = TVSeries.objects.get(pk=serie_id)
     return render(request, 'movie_app/detail.html', {'serie': serie})
 
 def index(request):
-    sort_by = request.GET.get('sort_by')
-
     series_list = TVSeries.objects.all()
-
-    if sort_by == 'released_year':
-        series_list = series_list.order_by('released_year')
-    elif sort_by == 'imdb_rating':
-        series_list = series_list.order_by('-imdb_rating')
-    elif sort_by == 'no_of_votes':
-        series_list = series_list.order_by('-no_of_votes') 
     paginator = Paginator(series_list, 20) 
 
     page_number = request.GET.get('page')

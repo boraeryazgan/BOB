@@ -44,52 +44,53 @@
 .card:hover .card-body {
     opacity: 1; 
 }
+
 .card-title {
-    font-size: 0.7rem;
+    font-size: 1.2rem;
 }
 
 .card-text {
-    font-size: 0.5rem;
+    font-size: 0.8rem;
 }
 @media (max-width: 1000px) {
     .card-title {
-        font-size: 0.8rem;
+        font-size: 1.6rem;
     }
 
     .card-text {
-        font-size: 0.6rem;
+        font-size: 1.2rem;
     }
 }
 
 @media (max-width: 999px) {
     .card-title {
-        font-size: 1rem;
+        font-size: 2rem;
     }
 
     .card-text {
-        font-size: 0.8rem;
+        font-size: 1.6rem;
     }
 }
 
 /* 600px - 799px arası ekranlar için */
 @media (max-width: 799px) {
     .card-title {
-        font-size: 1.2rem;
+        font-size: 2.4rem;
     }
 
     .card-text {
-        font-size: 1rem;
+        font-size: 2rem;
     }
 }
 
 /* 500px - 599px arası ekranlar için */
 @media (max-width: 599px) {
     .card-title {
-        font-size: 1.4rem;
+        font-size: 2.8rem;
     }
 
     .card-text {
-        font-size: 1.2rem;
+        font-size: 2.4rem;
     }
 }
 .link-overlay {
@@ -155,3 +156,4 @@
     background-color: #f0f0f0;
     color: #333;
 }
+

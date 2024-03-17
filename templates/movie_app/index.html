@@ -13,12 +13,35 @@
         
 
     {% endif %}
-    
+    <div class="sorting-container">
+        <span></span>
+        <div class="inputbox">
+            <form method="get" action="{% url 'index' %}">
+                <select name="sorting" required="required" onchange="submitForm()">
+                    <option value="" disabled {% if order_by == 'default' %}selected{% endif %}>Advanced Sorting</option>
+                    <option value="imdb_rating-descending" {% if order_by == 'imdb_rating-descending' %}selected{% endif %}>IMDB Rating Descending Order</option>
+                    <option value="imdb_rating-ascending" {% if order_by == 'imdb_rating-ascending' %}selected{% endif %}>IMDB Rating Ascending Order</option>
+                    <option value="no_of_votes-descending" {% if order_by == 'no_of_votes-descending' %}selected{% endif %}>Number of Votes Descending Order</option>
+                    <option value="no_of_votes-ascending" {% if order_by == 'no_of_votes-ascending' %}selected{% endif %}>Number of Votes Ascending Order</option>
+                    <option value="released_year-descending" {% if order_by == 'released_year-descending' %}selected{% endif %}>Release Year Descending Order</option>
+                    <option value="released_year-ascending" {% if order_by == 'released_year-ascending' %}selected{% endif %}>Release Year Ascending Order</option>
+                    <option value="runtime-descending" {% if order_by == 'runtime-descending' %}selected{% endif %}>Runtime Descending Order</option> 
+                    <option value="runtime-ascending" {% if order_by == 'runtime-ascending' %}selected{% endif %}>Runtime Ascending Order</option>
+                </select>
+                <button id="submitBtn" type="submit">Filter</button>
+            </form>                
+        </div>
+    </div>
     <div class="card-container">
         {% for serie in page_obj %}
         <div class="card">
             <img  loading="lazy" class="card-img-top" src="{{ serie.poster_link }}" alt="{{ serie.series_title }}">
             <div class="card-body">
+                <div class="hiddenSorting">
+                <p >{{ serie.no_of_votes }}</p>
+                <p >{{ serie.runtime }}</p>
+                <p >{{ serie.released_year }}</p>
+                </div> 
                 <h5 class="card-title">{{ serie.series_title }}</h5>
                 <p class="card-text">Genre: {{ serie.genre }}</p>
                 <p class="card-text">IMDB Rating: {{ serie.imdb_rating }}</p>
@@ -33,8 +56,8 @@
     <div class="pagination">
         <span class="step-links">
             {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; First</a>
-                <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                <a href="{{ current_url }}&page=1">&laquo; First</a>
+                <a href="{{ current_url }}&page={{ page_obj.previous_page_number }}">Previous</a>
             {% endif %}
     
             <span class="current">
@@ -42,10 +65,11 @@
             </span>
     
             {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">Next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                <a href="{{ current_url }}&page={{ page_obj.next_page_number }}">Next</a>
+                <a href="{{ current_url }}&page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
             {% endif %}
         </span>
     </div>
+    
 
 {%endblock%}

@@ -27,7 +27,12 @@
 .card:hover .card-body {
     background-color: rgba(0, 0, 0, 0.7); /* Kartın arka planını koyulaştır */
 }
+@media (max-width: 400px) {
 
+.text-end{
+    margin-top: 10px;
+}
+}
 .card-body {
     position: absolute;
     bottom: 0;
@@ -156,4 +161,46 @@
     background-color: #f0f0f0;
     color: #333;
 }
+  
 
+
+.sorting-container {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+}
+
+.sorting-container .inputbox {
+    margin-left: 10px;
+    
+}
+
+.sorting-container select {
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.sorting-container #submitBtn {
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #2f56ab;
+    color: whitesmoke;
+    border: 2px solid #4466af;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.sorting-container #submitBtn:hover {
+    background-color: #1a2f5c;
+    border-color: #2a3f6d;
+}
+
+
+.hiddenSorting{
+    visibility: hidden;
+    display: none;
+}

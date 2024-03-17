@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-    <div class="container">
+    <div style="margin-bottom:2rem;" class="container">
         <div class="row">
             <div class="col-lg-8">
                 <div class="embed-responsive embed-responsive-16by9 mb-4">
@@ -27,4 +27,27 @@
             </div>
         </div>
     </div>
+    {% if similar_series %}
+    <h3>Viewers who enjoyed {{ serie.series_title }} also liked these movies.</h3>
+    <div style="margin-top:2rem;" class="card-container">
+            
+            {% for similar_serie in similar_series %}
+                <div class="card">
+                    <img class="card-img-top" src="{{ similar_serie.poster_link }}" alt="{{ similar_serie.series_title }}">
+                    <div style="font-size:1.2rem;" class="card-body">
+                        <h5 class="card-title">{{ similar_serie.series_title }}</h5>
+                        <p class="card-text">IMDB Rating: {{ similar_serie.imdb_rating }}</p>
+                        <p class="card-text">Overview: {{ similar_serie.overview }}</p>
+                        <a href="{% url 'detail' similar_serie.id %}" class="btn btn-light btn-watch-trailer">Watch Trailer</a>
+
+                    </div>
+                    <a href="{% url 'detail' similar_serie.id %}" class="link-overlay"></a>
+
+                </div>
+            {% endfor %}
+    </div>
+    {%else%}
+
+    {% endif %}
+
 {% endblock %}

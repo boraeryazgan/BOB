@@ -1,12 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import LoginForm, SignUpForm
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import TVSeries
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import HttpResponse
 from django.template import loader
+from django.db.models.functions import Length
 
 @ensure_csrf_cookie
 def search(request):
@@ -21,17 +22,61 @@ def search(request):
         return render(request, 'movie_app/search.html')
     
 def detail(request, serie_id):
-    serie = TVSeries.objects.get(pk=serie_id)
-    return render(request, 'movie_app/detail.html', {'serie': serie})
+    serie = get_object_or_404(TVSeries, pk=serie_id)
+    similar_series = TVSeries.objects.filter(genre=serie.genre).exclude(pk=serie_id)
+    similar_series = similar_series.order_by('-imdb_rating')
+    if similar_series.count() >= 5:
+        similar_series = list(similar_series[:5])
+    elif 1 < similar_series.count() < 5:
+        similar_series = list(similar_series)
+    else:
+        similar_series = []
+        
+    return render(request, 'movie_app/detail.html', {'serie': serie, 'similar_series': similar_series})
 
 def index(request):
     series_list = TVSeries.objects.all()
-    paginator = Paginator(series_list, 20) 
 
+    order_by = request.GET.get('sorting', 'default')
+
+    if order_by == 'released_year-ascending':
+        series_list = series_list.order_by('released_year')
+    elif order_by == 'released_year-descending':
+        series_list = series_list.order_by('-released_year')
+    elif order_by == 'runtime-ascending':
+        series_list = series_list.annotate(runtime_length=Length('runtime')).order_by('runtime_length', 'runtime')
+    elif order_by == 'runtime-descending':
+        series_list = series_list.annotate(runtime_length=Length('runtime')).order_by('-runtime_length', '-runtime')
+    elif order_by == 'imdb_rating-ascending':
+        series_list = series_list.order_by('imdb_rating')
+    elif order_by == 'imdb_rating-descending':
+        series_list = series_list.order_by('-imdb_rating')
+    elif order_by == 'no_of_votes-ascending':
+        series_list = series_list.order_by('no_of_votes')
+    elif order_by == 'no_of_votes-descending':
+        series_list = series_list.order_by('-no_of_votes')
+
+    paginator = Paginator(series_list, 20)
     page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
 
-    return render(request, 'movie_app/index.html', {'page_obj': page_obj})
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+
+    current_url = request.build_absolute_uri()
+
+    url_parts = current_url.split('?')
+    base_url = url_parts[0]
+    query_params = url_parts[1].split('&') if len(url_parts) > 1 else []
+    filtered_params = [param for param in query_params if 'page=' not in param]
+    current_url = base_url + '?' + '&'.join(filtered_params)
+
+    current_url += f'&page={page_number}'
+
+    return render(request, 'movie_app/index.html', {'page_obj': page_obj, 'order_by': order_by, 'current_url': current_url})
 
 def login_view(request):
     if request.method == 'POST':

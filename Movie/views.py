@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import LoginForm, SignUpForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .models import TVSeries
+from .models import TVSeries, Review
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import HttpResponse
 from django.template import loader
@@ -23,6 +23,7 @@ def search(request):
     
 def detail(request, serie_id):
     serie = get_object_or_404(TVSeries, pk=serie_id)
+    review = Review.objects.filter(tv_serie=serie_id)
     similar_series = TVSeries.objects.filter(genre=serie.genre).exclude(pk=serie_id)
     similar_series = similar_series.order_by('-imdb_rating')
     if similar_series.count() >= 5:
@@ -32,7 +33,7 @@ def detail(request, serie_id):
     else:
         similar_series = []
         
-    return render(request, 'movie_app/detail.html', {'serie': serie, 'similar_series': similar_series})
+    return render(request, 'movie_app/detail.html', {'serie': serie, 'similar_series': similar_series,"reviews":review})
 
 def index(request):
     series_list = TVSeries.objects.all()
@@ -87,7 +88,7 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('/')  
+                return redirect('/')
             else:
                 messages.error(request, 'Kullanıcı adı veya şifre yanlış.')
     else:
@@ -128,3 +129,13 @@ def signup(request):
 def logout_view(request):
     logout(request)
     return redirect('/') 
+
+def review_rate(request):
+    if request.method == "GET":
+        serie_id = request.GET.get("serie_id")
+        serie = TVSeries.objects.get(id=serie_id)
+        comment = request.GET.get("comment")
+        rate = request.GET.get("rating")
+        user = request.user
+        Review(user=user, tv_serie=serie, comment=comment, rate=rate).save()
+        return redirect("detail",serie_id=serie_id)

@@ -6,47 +6,109 @@
         <div class="row">
             <div class="col-lg-8">
                 <div class="embed-responsive embed-responsive-16by9 mb-4">
-                    <iframe width="100%" height="500px" class="embed-responsive-item" src="https://www.youtube.com/embed/{{ serie.trailer_url }}" allowfullscreen></iframe>
+                    <iframe width="100%" height="500px" class="embed-responsive-item"
+                            src="https://www.youtube.com/embed/{{ serie.trailer_url }}" allowfullscreen></iframe>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="card">
                     <img class="card-img-top" src="{{ serie.poster_link }}" alt="{{ serie.series_title }}">
                     <div style="font-size:1.2rem;" class="card-body">
-                        <h5 >{{ serie.series_title }}</h5>
-                        <p >Released Year: {{ serie.released_year }}</p>
-                        <p >Runtime: {{ serie.runtime }}</p>
-                        <p >Genre: {{ serie.genre }}</p>
-                        <p >IMDB Rating: {{ serie.imdb_rating }}</p>
-                        <p >Overview: {{ serie.overview }}</p>
-                        <p >Director: {{ serie.director }}</p>
-                        <p >Stars: {{ serie.star1 }}, {{ serie.star2 }}, {{ serie.star3 }}, {{ serie.star4 }}</p>
-                        <p >No. of Votes: {{ serie.no_of_votes }}</p>
+                        <h5>{{ serie.series_title }}</h5>
+                        <p>Released Year: {{ serie.released_year }}</p>
+                        <p>Runtime: {{ serie.runtime }}</p>
+                        <p>Genre: {{ serie.genre }}</p>
+                        <p>IMDB Rating: {{ serie.imdb_rating }}</p>
+                        <p>Overview: {{ serie.overview }}</p>
+                        <p>Director: {{ serie.director }}</p>
+                        <p>Stars: {{ serie.star1 }}, {{ serie.star2 }}, {{ serie.star3 }}, {{ serie.star4 }}</p>
+                        <p>No. of Votes: {{ serie.no_of_votes }}</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!--- Rating System --->
+    <div class="container mb-3">
+        <h3>
+            Comments:
+        </h3>
+        <div class="row">
+            <div class="col-lg-8" id="comments">
+                {% for review in reviews %}
+                    <div class="card mb-2">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div class="fw-bold">Username: {{ review.user.username }}
+                                <span class="ms-2">
+              <span class="{% if review.rate > 0 %}fas{% else %}far{% endif %} fa-star text-warning"></span>
+              <span class="{% if review.rate > 1 %}fas{% else %}far{% endif %} fa-star text-warning"></span>
+              <span class="{% if review.rate > 2 %}fas{% else %}far{% endif %} fa-star text-warning"></span>
+              <span class="{% if review.rate > 3 %}fas{% else %}far{% endif %} fa-star text-warning"></span>
+              <span class="{% if review.rate > 4 %}fas{% else %}far{% endif %} fa-star text-warning"></span>
+            </span>
+                            </div>
+                            <div class="text-end">
+                                <small>{{ review.created_at }}</small>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{ review.comment }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="col-lg-4" id="new-comment">
+
+                <form action="/review" method="GET">
+                    <input type="hidden" name="serie_id" id="serie_id" value="{{ serie.id }}">
+                    <h4>New Comment</h4>
+                    <div class="stars ">
+                        <input type="radio" id="star5" name="rating" value="5">
+                        <label for="star5">&#9733;</label>
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4">&#9733;</label>
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3">&#9733;</label>
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2">&#9733;</label>
+                        <input type="radio" id="star1" name="rating" value="1">
+                        <label for="star1">&#9733;</label>
+                    </div>
+                    <div class="comment mb-3">
+                        <label for="comment" class="form-label">Comments:</label>
+                        <textarea id="comment" name="comment" rows="4" class="form-control"></textarea>
+                    </div>
+                    {% if user.is_authenticated %}
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    {% else %}
+                        <p>You must be logged in to post a review, <a href="{% url "login" %}}">Login</a></p>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
     {% if similar_series %}
-    <h3>Viewers who enjoyed {{ serie.series_title }} also liked these movies.</h3>
-    <div style="margin-top:2rem;" class="card-container">
-            
+        <h3>Viewers who enjoyed {{ serie.series_title }} also liked these movies.</h3>
+        <div style="margin-top:2rem;" class="card-container">
+
             {% for similar_serie in similar_series %}
                 <div class="card">
-                    <img class="card-img-top" src="{{ similar_serie.poster_link }}" alt="{{ similar_serie.series_title }}">
+                    <img class="card-img-top" src="{{ similar_serie.poster_link }}"
+                         alt="{{ similar_serie.series_title }}">
                     <div style="font-size:1.2rem;" class="card-body">
                         <h5 class="card-title">{{ similar_serie.series_title }}</h5>
                         <p class="card-text">IMDB Rating: {{ similar_serie.imdb_rating }}</p>
                         <p class="card-text">Overview: {{ similar_serie.overview }}</p>
-                        <a href="{% url 'detail' similar_serie.id %}" class="btn btn-light btn-watch-trailer">Watch Trailer</a>
+                        <a href="{% url 'detail' similar_serie.id %}" class="btn btn-light btn-watch-trailer">Watch
+                            Trailer</a>
 
                     </div>
                     <a href="{% url 'detail' similar_serie.id %}" class="link-overlay"></a>
 
                 </div>
             {% endfor %}
-    </div>
-    {%else%}
+        </div>
+    {% else %}
 
     {% endif %}
 

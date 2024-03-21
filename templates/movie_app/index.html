@@ -4,7 +4,6 @@
 
     {% if user.is_authenticated %}
         <p>Hoş geldiniz, {{ user.username }}</p>
-        <p>Hoş geldiniz, olci</p>
         <p>{{user.email}}</p>
         
 
@@ -36,7 +35,7 @@
         {% for serie in page_obj %}
         <div class="card">
             <img  loading="lazy" class="card-img-top" src="{{ serie.poster_link }}" alt="{{ serie.series_title }}">
-            <div class="card-body">
+            <div class="card-body custom-card-body">
                 <div class="hiddenSorting">
                 <p >{{ serie.no_of_votes }}</p>
                 <p >{{ serie.runtime }}</p>

@@ -24,7 +24,7 @@
     filter: brightness(0.8); /* Resmi biraz karart */
 }
 
-.card:hover .card-body {
+.card:hover .custom-card-body {
     background-color: rgba(0, 0, 0, 0.7); /* Kartın arka planını koyulaştır */
 }
 
@@ -35,7 +35,7 @@
     }
 }
 
-.card-body {
+.custom-card-body {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -48,7 +48,7 @@
     pointer-events: none;
 }
 
-.card:hover .card-body {
+.card:hover .custom-card-body {
     opacity: 1;
 }
 

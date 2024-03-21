@@ -13,7 +13,7 @@
             <div class="col-lg-4">
                 <div class="card">
                     <img class="card-img-top" src="{{ serie.poster_link }}" alt="{{ serie.series_title }}">
-                    <div style="font-size:1.2rem;" class="card-body">
+                    <div style="font-size:1.2rem;" class="card-body custom-card-body">
                         <h5>{{ serie.series_title }}</h5>
                         <p>Released Year: {{ serie.released_year }}</p>
                         <p>Runtime: {{ serie.runtime }}</p>
@@ -81,7 +81,7 @@
                     {% if user.is_authenticated %}
                     <button type="submit" class="btn btn-primary">Submit</button>
                     {% else %}
-                        <p>You must be logged in to post a review, <a href="{% url "login" %}}">Login</a></p>
+                        <p>You must be logged in to post a review, <a href="{% url "login" %}">Login</a></p>
                     {% endif %}
                 </form>
             </div>
@@ -95,7 +95,7 @@
                 <div class="card">
                     <img class="card-img-top" src="{{ similar_serie.poster_link }}"
                          alt="{{ similar_serie.series_title }}">
-                    <div style="font-size:1.2rem;" class="card-body">
+                    <div style="font-size:1.2rem;" class="card-body custom-card-body">
                         <h5 class="card-title">{{ similar_serie.series_title }}</h5>
                         <p class="card-text">IMDB Rating: {{ similar_serie.imdb_rating }}</p>
                         <p class="card-text">Overview: {{ similar_serie.overview }}</p>

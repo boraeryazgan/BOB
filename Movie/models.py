@@ -30,3 +30,12 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.id} - Comment by {self.user.username} at {self.tv_serie.series_title}"
+
+class Playlist(models.Model):
+    title = models.CharField(max_length=120)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    movies = models.ManyToManyField(TVSeries)
+    is_like_playlist = models.BooleanField()
+
+    def __str__(self):
+        return self.title

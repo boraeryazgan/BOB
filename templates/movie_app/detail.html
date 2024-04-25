@@ -8,6 +8,26 @@
                 <div class="embed-responsive embed-responsive-16by9 mb-4">
                     <iframe width="100%" height="500px" class="embed-responsive-item"
                             src="https://www.youtube.com/embed/{{ serie.trailer_url }}" allowfullscreen></iframe>
+                    <div>
+                        {% if user.is_authenticated %}
+                            <form method="GET" action="{% url 'add_to_liked_list' %}">
+                                <input type="hidden" name="serie_id" id="serie_id" value="{{ serie.id }}">
+                                <button type="submit" name="like" value="True" class="btn btn-outline-primary btn-md me-2"><i
+                                        class="far
+                                        {% if like_button_statement %}
+                                        fa-thumbs-up
+                                        {% else %}
+                                        fa-thumbs-down
+                                        {% endif %}
+                                        fa-2x"></i></button>
+                                                            <button type="submit" name="playlist" value="True" class="btn btn-outline-success btn-md"><i
+                                        class="fas fa-plus fa-2x"></i></button>
+                            </form>
+                        {% else %}
+                            <p>You must be logged in to create a playlist, <a href="{% url 'login' %}">Login</a></p>
+                        {% endif %}
+                    </div>
+
                 </div>
             </div>
             <div class="col-lg-4">
@@ -30,10 +50,6 @@
     </div>
     <!--- Rating System --->
     <div class="container mb-3">
-                <div class="text-end">
-          <button type="button" class="btn btn-outline-primary btn-sm me-2"><i class="far fa-thumbs-up fa-2x"></i></button>
-          <button type="button" class="btn btn-outline-success btn-sm"><i class="fas fa-plus fa-2x"></i></button>
-        </div>
         <h3>
             Comments:
         </h3>
@@ -84,7 +100,7 @@
                         <textarea id="comment" name="comment" rows="4" class="form-control"></textarea>
                     </div>
                     {% if user.is_authenticated %}
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     {% else %}
                         <p>You must be logged in to post a review, <a href="{% url 'login' %}">Login</a></p>
                     {% endif %}

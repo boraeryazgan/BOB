@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import LoginForm, SignUpForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .models import TVSeries, Review
+from .models import TVSeries, Review, Playlist
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import HttpResponse
 from django.template import loader
@@ -32,8 +32,18 @@ def detail(request, serie_id):
         similar_series = list(similar_series)
     else:
         similar_series = []
-        
-    return render(request, 'movie_app/detail.html', {'serie': serie, 'similar_series': similar_series,"reviews":review})
+
+    liked_playlist = Playlist.objects.filter(user=request.user,is_like_playlist=True)
+    if len(liked_playlist) != 0:
+        liked_playlist = liked_playlist[0]
+        is_associated = Playlist.objects.filter(movies=serie).exists()
+        if is_associated:
+            like_button_statement = False
+        else:
+            like_button_statement = True
+    else:
+        like_button_statement = True
+    return render(request, 'movie_app/detail.html', {'serie': serie, 'similar_series': similar_series,"reviews":review,"like_button_statement":like_button_statement})
 
 def index(request):
     series_list = TVSeries.objects.all()
@@ -139,3 +149,25 @@ def review_rate(request):
         user = request.user
         Review(user=user, tv_serie=serie, comment=comment, rate=rate).save()
         return redirect("detail",serie_id=serie_id)
+
+def add_to_liked_list(request):
+    if request.method == "GET":
+        if request.GET.get("like",None) == "True":
+            # Liked movies list
+            serie_id = request.GET.get("serie_id")
+            serie = TVSeries.objects.get(id=serie_id)
+            user = request.user
+            title_str = f"Liked films of {user.username}"
+            liked_movies_playlist = Playlist.objects.filter(user=user,is_like_playlist=True)
+            if len(liked_movies_playlist) == 0:
+                # Create playlist
+                q = Playlist.objects.create(title=title_str, user=user, is_like_playlist=True)
+                q.movies.add(serie)
+            else:
+                q = Playlist.objects.filter(user=user,is_like_playlist=True)[0]
+                q.movies.add(serie)
+        if request.GET.get("playlist",None) == "True":
+            # Other playlist
+            pass
+        return redirect("detail",serie_id=serie_id)
+

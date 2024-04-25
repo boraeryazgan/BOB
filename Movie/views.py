@@ -32,17 +32,19 @@ def detail(request, serie_id):
         similar_series = list(similar_series)
     else:
         similar_series = []
-
-    liked_playlist = Playlist.objects.filter(user=request.user,is_like_playlist=True)
-    if len(liked_playlist) != 0:
-        liked_playlist = liked_playlist[0]
-        is_associated = Playlist.objects.filter(movies=serie).exists()
-        if is_associated:
-            like_button_statement = False
+    like_button_statement = None
+    if len(request.user.username) != 0:
+        liked_playlist = Playlist.objects.filter(user=request.user, is_like_playlist=True)
+        if len(liked_playlist) != 0:
+            liked_playlist = liked_playlist[0]
+            is_associated = Playlist.objects.filter(movies=serie).exists()
+            if is_associated:
+                like_button_statement = False
+            else:
+                like_button_statement = True
         else:
             like_button_statement = True
-    else:
-        like_button_statement = True
+
     return render(request, 'movie_app/detail.html', {'serie': serie, 'similar_series': similar_series,"reviews":review,"like_button_statement":like_button_statement})
 
 def index(request):

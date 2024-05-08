@@ -1,6 +1,33 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block specific_css_multi %}
+    <style>
+        /* Hide the bubble by default */
+        .hidden {
+            display: none;
+        }
 
+        /* Style for the bubble */
+        #playlistBubble {
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #createPlaylistButton {
+            padding: 8px 16px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+    </style>
+{% endblock %}
 {% block content %}
     <div style="margin-bottom:2rem;" class="container">
         <div class="row">
@@ -10,19 +37,49 @@
                             src="https://www.youtube.com/embed/{{ serie.trailer_url }}" allowfullscreen></iframe>
                     <div>
                         {% if user.is_authenticated %}
-                            <form method="GET" action="{% url 'add_to_liked_list' %}">
+                            <form method="GET" action="{% url 'add_to_liked_list' %}" style="display: inline-block">
                                 <input type="hidden" name="serie_id" id="serie_id" value="{{ serie.id }}">
-                                <button type="submit" name="like" value="True" class="btn btn-outline-primary btn-md me-2"><i
+                                <button type="submit" name="like" value="True"
+                                        class="btn btn-outline-primary btn-md me-2"><i
                                         class="far
                                         {% if like_button_statement %}
                                         fa-thumbs-up
                                         {% else %}
-                                        fa-thumbs-down
+                                        fa-ban
                                         {% endif %}
                                         fa-2x"></i></button>
-                                                            <button type="submit" name="playlist" value="True" class="btn btn-outline-success btn-md"><i
-                                        class="fas fa-plus fa-2x"></i></button>
                             </form>
+                            <button id="playlistButton" name="playlist"
+                                    class="btn btn-outline-success btn-md"><i
+                                    class="fas fa-plus fa-2x"></i></button>
+
+                            <form method="GET" action="{% url 'add_to_playlist' %}">
+                                <input type="hidden" name="serie_id" id="serie_id" value="{{ serie.id }}">
+
+                                <div id="playlistBubble" class="hidden">
+                                    <h2>Select or Create Playlist</h2>
+                                    <ul id="playlistList">
+                                        {% for playlist in user_playlists %}
+                                            <li>{{ playlist.title }}
+                                                {% if serie in playlist.movies.all %}
+                                                    <button type="submit" id="RemovePlaylistButton"
+                                                            name="RemovePlaylistButton" value="{{ playlist.id }}">Remove
+                                                    </button>
+                                                {% else %}
+                                                    <button type="submit" id="AddPlaylistButton"
+                                                            name="AddPlaylistButton" value="{{ playlist.id }}">Add
+                                                    </button>
+                                                {% endif %}</li>
+                                        {% endfor %}
+                                    </ul>
+                                    <input type="text" id="newPlaylistName" name="newPlaylistName"
+                                           placeholder="New Playlist Name">
+                                    <button type="submit" id="createPlaylistButton" name="playlist" value="True">Create
+                                        Playlist
+                                    </button>
+                                </div>
+                            </form>
+
                         {% else %}
                             <p>You must be logged in to create a playlist, <a href="{% url 'login' %}">Login</a></p>
                         {% endif %}
@@ -133,4 +190,20 @@
 
     {% endif %}
 
+{% endblock %}
+
+{% block extra_js %}
+
+    <script>
+        // Get references to DOM elements
+        const playlistButton = document.getElementById('playlistButton');
+        const playlistBubble = document.getElementById('playlistBubble');
+
+        // Event listener for clicking the playlist button
+        playlistButton.addEventListener('click', () => {
+            // Toggle the visibility of the playlist bubble
+            playlistBubble.classList.toggle('hidden');
+        });
+
+    </script>
 {% endblock %}

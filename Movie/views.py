@@ -32,20 +32,22 @@ def detail(request, serie_id):
         similar_series = list(similar_series)
     else:
         similar_series = []
+
     like_button_statement = None
-    if len(request.user.username) != 0:
-        liked_playlist = Playlist.objects.filter(user=request.user, is_like_playlist=True)
-        if len(liked_playlist) != 0:
-            liked_playlist = liked_playlist[0]
-            is_associated = Playlist.objects.filter(movies=serie).exists()
-            if is_associated:
+    if request.user.is_authenticated:
+        if Playlist.objects.filter(user=request.user, is_like_playlist=True).exists(): # If playlist exists
+            liked_playlist = Playlist.objects.filter(user=request.user, is_like_playlist=True)[0]
+            if serie in liked_playlist.movies.all():
                 like_button_statement = False
             else:
                 like_button_statement = True
         else:
             like_button_statement = True
 
-    return render(request, 'movie_app/detail.html', {'serie': serie, 'similar_series': similar_series,"reviews":review,"like_button_statement":like_button_statement})
+        user_playlists = Playlist.objects.filter(user=request.user,is_like_playlist=False)
+
+    return render(request, 'movie_app/detail.html', {'serie': serie, 'similar_series': similar_series,"reviews":review,"like_button_statement":like_button_statement,
+                                                     "user_playlists":user_playlists})
 
 def index(request):
     series_list = TVSeries.objects.all()
@@ -153,23 +155,46 @@ def review_rate(request):
         return redirect("detail",serie_id=serie_id)
 
 def add_to_liked_list(request):
-    if request.method == "GET":
-        if request.GET.get("like",None) == "True":
-            # Liked movies list
-            serie_id = request.GET.get("serie_id")
-            serie = TVSeries.objects.get(id=serie_id)
-            user = request.user
-            title_str = f"Liked films of {user.username}"
-            liked_movies_playlist = Playlist.objects.filter(user=user,is_like_playlist=True)
-            if len(liked_movies_playlist) == 0:
-                # Create playlist
-                q = Playlist.objects.create(title=title_str, user=user, is_like_playlist=True)
-                q.movies.add(serie)
+    if request.method == "GET" and request.GET.get("like",None) == "True":
+        # Liked movies list
+        serie_id = request.GET.get("serie_id")
+        serie = TVSeries.objects.get(id=serie_id)
+        user = request.user
+        title_str = f"Liked films of {user.username}"
+
+        if Playlist.objects.filter(user=user,is_like_playlist=True).exists(): #If user has liked movies playlist
+            users_liked_playlist = Playlist.objects.filter(user=user,is_like_playlist=True)[0]
+            if serie in users_liked_playlist.movies.all(): # Check if movie is in the playlist
+                users_liked_playlist.movies.remove(serie)
             else:
-                q = Playlist.objects.filter(user=user,is_like_playlist=True)[0]
-                q.movies.add(serie)
-        if request.GET.get("playlist",None) == "True":
-            # Other playlist
-            pass
+                users_liked_playlist.movies.add(serie)
+        else: # If user does not have liked movies playlist
+            q = Playlist.objects.create(title=title_str, user=user, is_like_playlist=True)
+            q.movies.add(serie)
+
         return redirect("detail",serie_id=serie_id)
 
+def add_to_playlist(request):
+    serie_id = request.GET.get("serie_id")
+    serie = TVSeries.objects.get(id=serie_id)
+    user = request.user
+    print(request.GET)
+    print(bool(request.GET["newPlaylistName"]))
+    if request.method == "GET":
+        if request.GET.get("playlist",None) == "True": # Create playlist button
+            if request.GET.get("newPlaylistName", None):
+                new_playlist_name = request.GET["newPlaylistName"]
+                q = Playlist.objects.create(title=new_playlist_name, user=user, is_like_playlist=False)
+                q.movies.add(serie)
+
+
+        elif request.GET.get("RemovePlaylistButton",None):
+            q = Playlist.objects.filter(id=request.GET["RemovePlaylistButton"])[0]
+            q.movies.remove(serie)
+
+        elif request.GET.get("AddPlaylistButton",None):
+            q = Playlist.objects.filter(id=request.GET["AddPlaylistButton"])[0]
+            q.movies.add(serie)
+
+
+    return redirect("detail",serie_id=serie_id)

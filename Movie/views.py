@@ -8,6 +8,8 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import HttpResponse
 from django.template import loader
 from django.db.models.functions import Length
+from django.contrib.auth.decorators import login_required
+from django.db.models import F,Q
 
 @ensure_csrf_cookie
 def search(request):
@@ -198,3 +200,47 @@ def add_to_playlist(request):
 
 
     return redirect("detail",serie_id=serie_id)
+
+@login_required
+def recommend_similar_series(request):
+    if not request.user.is_authenticated or not request.user.is_active:
+        return redirect("login")
+
+    user_watched_series_ids = Playlist.objects.filter(user=request.user).values_list('movies__id', flat=True)
+
+    user_series_info = TVSeries.objects.filter(id__in=user_watched_series_ids).values_list('genre', 'imdb_rating')
+
+    similar_series_query = TVSeries.objects.exclude(id__in=user_watched_series_ids)
+
+    if not user_watched_series_ids:
+        similar_series_query = TVSeries.objects.all()
+
+    filter_conditions = Q()  
+    for genre, imdb_rating in user_series_info:
+        filter_conditions |= Q(genre__contains=genre, imdb_rating__gte=imdb_rating-0.5, imdb_rating__lte=imdb_rating+0.5)
+
+    similar_series_query = similar_series_query.filter(filter_conditions)
+
+    # Yeni eklenen diziye en benzeyeni al
+    if user_watched_series_ids:
+        latest_watched_series_id = user_watched_series_ids.latest('id')  
+        latest_watched_series = TVSeries.objects.get(id=latest_watched_series_id)  
+        most_similar_series = similar_series_query.annotate(
+            similarity=F('imdb_rating') - latest_watched_series.imdb_rating
+        ).order_by('-similarity').first()
+        if most_similar_series:
+            similar_series_query = similar_series_query.exclude(id=most_similar_series.id)
+
+    similar_series_query = similar_series_query.annotate(
+        similarity=F('imdb_rating') / (F('imdb_rating') + 1)  
+    ).order_by('-similarity')
+
+    recommended_series_ids = similar_series_query.values_list('id', flat=True)[:10]  
+    recommended_series = TVSeries.objects.filter(id__in=recommended_series_ids)
+
+    context = {'series_list': recommended_series}
+    return render(request, 'movie_app/algorithm.html', context)
+
+def view_playlists(request):
+    playlists = Playlist.objects.filter(user=request.user)
+    return render(request, 'movie_app/playlist.html', {'playlists': playlists})

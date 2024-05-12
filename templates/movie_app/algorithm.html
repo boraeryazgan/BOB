@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<h3>Thanks to the movies you added to your playlist; we recommend these for you!</h3>
+
+<div class="card-container">
+    {% for serie in series_list %}
+    <div class="card">
+        <img  loading="lazy" class="card-img-top" src="{{ serie.poster_link }}" alt="{{ serie.series_title }}">
+        <div class="card-body custom-card-body">
+            <div class="hiddenSorting">
+            <p >{{ serie.no_of_votes }}</p>
+            <p >{{ serie.runtime }}</p>
+            <p >{{ serie.released_year }}</p>
+            </div> 
+            <h5 class="card-title">{{ serie.series_title }}</h5>
+            <p class="card-text">Genre: {{ serie.genre }}</p>
+            <p class="card-text">IMDB Rating: {{ serie.imdb_rating }}</p>
+            <p class="card-text">Overview: {{ serie.overview }}</p>
+            <a href="{% url 'detail' serie.id %}" class="btn btn-light btn-watch-trailer">Watch Trailer</a>
+        </div>
+        <a href="{% url 'detail' serie.id %}" class="link-overlay"></a>
+    </div>
+    {% endfor %}
+</div>
+
+
+{% endblock %}

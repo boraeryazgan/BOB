@@ -10,7 +10,7 @@
             <div class="card-container">
 
             {% for serie in playlist.movies.all %}
-            <div class="card">
+            <div class="card" style="max-height: 400px;max-width: 270px" >
                 <img  loading="lazy" class="card-img-top" src="{{ serie.poster_link }}" alt="{{ serie.series_title }}">
                 <div class="card-body custom-card-body">
                     <div class="hiddenSorting">

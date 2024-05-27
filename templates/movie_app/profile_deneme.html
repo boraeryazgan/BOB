@@ -1,0 +1,229 @@
+{% extends 'base.html' %}{%load static%}
+{% if user.is_authenticated %}        
+    {%block content%}
+
+
+                                                
+
+        
+        <style>
+            .list-group-item.active {
+                background: #a9a9a9 !important;
+            }
+            .bg-warning {
+                background: #a9a9a9 !important;
+            }
+            .modal-content {
+                background-color: #fefefe;
+                margin: 4% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 70%;
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+                transition: transform 0.3s ease-in-out;
+                /*transform: translateY(-100%);*/
+            }
+            .close {
+                float: right;
+                text-align: right;
+                font-size: 30px;
+            }
+            .modal-content h2 {
+                text-align: center;
+                margin-top: -35px;
+            }
+            .button_div {
+                justify-content: center;
+                text-align: center;
+            }
+            .button_div button {
+                margin-right: 10px;
+                background: #a9a9a9;
+                border: 1px solid #a9a9a9;
+                padding: 5px 15px;
+                color: #FFFFFF;
+                border-radius: 2px;
+            }
+            #addAddressForm input {
+                padding: 5px;
+            }
+            .nice-select {
+                padding: 0px !important;
+                height: 38px !important;
+                line-height: 38px !important;
+            }
+            
+            .add_address_button {
+                background: #a9a9a9;
+                border: 1px solid #a9a9a9;
+                padding: 5px 15px;
+                color: #FFFFFF;
+                border-radius: 2px;
+            }
+            
+            @media (max-width: 768px) {
+                .main_flex_div {
+                    display: flex;
+                    flex-direction: column;
+                }
+                .inner_flex_div {
+                    min-width: 100% !important;
+                }
+                .modal-content {
+                    padding: 10px 0px !important;
+                    min-width: 95% !important;
+                    height: 700px;
+                    overflow: scroll;
+                }
+                .close {
+                    margin-right: 10px;
+                }
+            }
+        </style>
+        
+
+            
+            
+
+    
+    
+    
+    
+    <section class="my-5">
+        <div class="container">
+            <div class="main-body">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex flex-column align-items-center text-center">
+                                    <img src="https://i.ebayimg.com/images/g/EAEAAOSwqX5jVoTs/s-l225.jpg" alt="Admin"
+                                        class="rounded-circle p-1 bg-warning" width="110">
+                                    <div class="mt-3" style="color: #eee;">
+                                        {% if user.is_authenticated %}
+                                        <h4>Welcome, {{ user.username }}</h4>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="list-group list-group-flush text-center mt-4">
+                                    <a href="#" class="list-group-item list-group-item-action border-0"
+                                        onclick="showProfileDetails()">Profile Information</a>
+                                    <a href="#" class="list-group-item list-group-item-action border-0 active"
+                                        onclick="showPlaylists()">Playlists</a>                                    
+                                    <a href="{% url 'logout' %}" class="list-group-item list-group-item-action border-0">Logout</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div id="Playlists" class="card" style="display: none;">
+                            <div class="card-body d-flex justify-content-center align-items-center">
+                                <a href="{% url 'view_playlists' %}" button type="button" class="btn btn-outline-black huge-btn">PLAYLISTS</a>
+                            </div>
+                            
+                                <style>
+                                    .huge-btn {
+                                        font-size: 40px;
+                                        padding: 40px 60px;
+                                        font-family: 'Roboto', sans-serif; /* Using Roboto font as an example, you can replace it with any other cool font */
+                                        text-transform: uppercase; /* Making the text uppercase for a bold appearance */
+                                        letter-spacing: 2px; /* Adding letter spacing for a stylish look */
+                                        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Adding a shadow effect */
+                                        color: #fff; /* Changing text color to white */
+                                        background-color: #a9a9a9; /* Changing background color */
+                                        border-color: #a9a9a9; /* Changing border color */
+                                    }
+                                
+                                    .card {
+                                        width: 450px; /* Adjust as needed */
+                                        margin: auto; /* Center the card horizontally */
+                                    }
+                                </style>
+                            
+                        </div>
+
+                        <div id="profileDetails" class="card" style="display: none;">
+                            <div class="card-body">
+                                <div class="profile-info" style="font-family: Arial, sans-serif; color: #ccc;">
+                                    <h5 style="font-weight: bold;">Profile Information</h5>
+                                    <div style="margin-bottom: 10px;">
+                                        <strong>Username:</strong> {{user.username}}
+                                    </div>
+                                    <div style="margin-bottom: 10px;">
+                                        <strong>Full Name:</strong> {{user.first_name}} {{user.last_name}}
+                                    </div>
+                                    <div>
+                                        <strong>Email Address:</strong> {{user.email}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                                                
+                        <div id="addAddressModal" class="modal">
+                            <!-- Content for modal -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+            
+            <script>
+            
+            function showAddAddressModal() {
+                const modal = document.getElementById('addAddressModal');
+                modal.style.display = 'block';
+                isFormVisible = true;
+            }
+
+            function closeAddAddressModal() {
+                const modal = document.getElementById('addAddressModal');
+                modal.style.display = 'none';
+                isFormVisible = false;
+            }
+            
+            function showProfileDetails() {
+                hideAllSections();
+                document.getElementById('profileDetails').style.display = 'block';
+                setActiveLink(0);
+            }
+
+            function showPlaylists() {
+                hideAllSections();
+                document.getElementById('Playlists').style.display = 'block';
+                setActiveLink(1);
+            }
+
+
+            function hideAllSections() {
+                document.getElementById('Playlists').style.display = 'none';
+                document.getElementById('profileDetails').style.display = 'none';
+            }
+
+            function setActiveLink(index) {
+                document.querySelector('.list-group-item.active').classList.remove('active');
+                document.querySelectorAll('.list-group-item')[index].classList.add('active');
+            }
+
+            showProfileDetails();
+        </script>
+            
+    </body>
+
+    </html>
+    {%endblock%}
+
+{% endif %}

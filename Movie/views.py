@@ -241,6 +241,18 @@ def recommend_similar_series(request):
     context = {'series_list': recommended_series}
     return render(request, 'movie_app/algorithm.html', context)
 
+
 def view_playlists(request):
     playlists = Playlist.objects.filter(user=request.user)
     return render(request, 'movie_app/playlist.html', {'playlists': playlists})
+
+
+def profile(request):
+    return render(request, 'movie_app/profile_deneme.html')
+
+    
+@login_required
+def profile_deneme(request):
+    return render(request, 'movie_app/profile_deneme.html')
+
+

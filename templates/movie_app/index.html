@@ -3,15 +3,16 @@
 {%block content%}
 
     {% if user.is_authenticated %}
-        <p>Hoş geldiniz, {{ user.username }}</p>
-        <p>{{user.email}}</p>
-        
-
+    <div class="welcome-message">
+        <p class="welcome-text">Hoş geldiniz, <span class="username">{{ user.username }}</span>!</p>
+        <p class="email">Email: {{ user.email }}</p>
+    </div>
     {% else %}
-        <p>Lütfen giriş yapın veya kayıt olun.</p>
-        
-
+    <div class="welcome-message">
+        <p class="welcome-text">Please login or sign-up.</p>
+    </div>
     {% endif %}
+
     <div class="sorting-container">
         <span></span>
         <div class="inputbox">
@@ -60,8 +61,9 @@
             {% endif %}
     
             <span class="current">
-                Sayfa {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+                <span class="page-number">{{ page_obj.number }}</span> / <span class="total-pages">{{ page_obj.paginator.num_pages }}</span>
             </span>
+            
     
             {% if page_obj.has_next %}
                 <a href="{{ current_url }}&page={{ page_obj.next_page_number }}">Next</a>

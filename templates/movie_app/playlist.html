@@ -1,34 +1,35 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+{% endblock %}
+
 {% block content %}
-<h1>Playlists</h1>
-    <ul>
-        {% for playlist in playlists %}
-        <h4>{{ playlist.title }}</h4>
-        <ul>
-            <div class="card-container">
-
-            {% for serie in playlist.movies.all %}
-            <div class="card" style="max-height: 400px;max-width: 270px" >
-                <img  loading="lazy" class="card-img-top" src="{{ serie.poster_link }}" alt="{{ serie.series_title }}">
-                <div class="card-body custom-card-body">
-                    <div class="hiddenSorting">
-                    <p >{{ serie.no_of_votes }}</p>
-                    <p >{{ serie.runtime }}</p>
-                    <p >{{ serie.released_year }}</p>
-                    </div> 
-                    <h5 class="card-title">{{ serie.series_title }}</h5>
-                    <p class="card-text">Genre: {{ serie.genre }}</p>
-                    <p class="card-text">IMDB Rating: {{ serie.imdb_rating }}</p>
-                    <p class="card-text">Overview: {{ serie.overview }}</p>
-                    <a href="{% url 'detail' serie.id %}" class="btn btn-light btn-watch-trailer">Watch Trailer</a>
+<div class="playlist-heading">Playlists</div>
+<ul>
+    {% for playlist in playlists %}
+    <div class="playlist-name">{{ playlist.title }}</div>
+    <ul class="card-container">
+        {% for serie in playlist.movies.all %}
+        <li class="card">
+            <img loading="lazy" class="card-img-top" src="{{ serie.poster_link }}" alt="{{ serie.series_title }}">
+            <div class="card-body custom-card-body">
+                <div class="hiddenSorting">
+                    <p>{{ serie.no_of_votes }}</p>
+                    <p>{{ serie.runtime }}</p>
+                    <p>{{ serie.released_year }}</p>
                 </div>
-                <a href="{% url 'detail' serie.id %}" class="link-overlay"></a>
-            </div>            {% endfor %}
-        </ul>
-        <hr>
+                <h5 class="card-title">{{ serie.series_title }}</h5>
+                <p class="card-text">Genre: {{ serie.genre }}</p>
+                <p class="card-text">IMDB Rating: {{ serie.imdb_rating }}</p>
+                <p class="card-text">Overview: {{ serie.overview }}</p>
+                <a href="{% url 'detail' serie.id %}" class="btn btn-watch-trailer">Watch Trailer</a>
+            </div>
+            <a href="{% url 'detail' serie.id %}" class="link-overlay"></a>
+        </li>
         {% endfor %}
-    </div>
-
+    </ul>
+    {% endfor %}
+</ul>
 {% endblock %}

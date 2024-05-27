@@ -105,11 +105,9 @@
             </div>
         </div>
     </div>
-    <!--- Rating System --->
+    <!--- Rating System -->
     <div class="container mb-3">
-        <h3>
-            Comments:
-        </h3>
+        <h3 style="color: #eee;"> Comments: </h3>
 
         <div class="row">
             <div class="col-lg-8" id="comments">
@@ -139,7 +137,7 @@
 
                 <form action="/review" method="GET">
                     <input type="hidden" name="serie_id" id="serie_id" value="{{ serie.id }}">
-                    <h4>New Comment</h4>
+                    <h4 style="color: #eee;">New Comment</h4>
                     <div class="stars ">
                         <input type="radio" id="star5" name="rating" value="5">
                         <label for="star5">&#9733;</label>
@@ -153,7 +151,7 @@
                         <label for="star1">&#9733;</label>
                     </div>
                     <div class="comment mb-3">
-                        <label for="comment" class="form-label">Comments:</label>
+                        <label for="comment" class="form-label" style="color: #eee;" >Comments:</label>
                         <textarea id="comment" name="comment" rows="4" class="form-control"></textarea>
                     </div>
                     {% if user.is_authenticated %}
@@ -166,7 +164,7 @@
         </div>
     </div>
     {% if similar_series %}
-        <h3>Viewers who enjoyed {{ serie.series_title }} also liked these movies.</h3>
+        <h3 style="color: #eee;">Viewers who enjoyed {{ serie.series_title }} also liked these movies.</h3>
         <div style="margin-top:2rem;" class="card-container">
 
             {% for similar_serie in similar_series %}

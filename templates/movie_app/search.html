@@ -10,8 +10,8 @@
 <section id="searchPage">
     {%if query%}
     <div class="search-results-container">
-      <h1>"{{ query|title }}" için arama sonuçları</h1>
-      <h2>Filmler</h2>
+      <h1 style="color: #eee;">Searching results for : "{{ query|title }}"</h1>
+      <h2 style="color: #ccc;">Movies</h2>
       <ul>
         {% for serie in series %}
         <a href="{% url 'detail' serie.id %}"><li class="film-item">{{ serie.series_title }}
@@ -20,13 +20,13 @@
         
         {% empty %}
         
-        <li class="no-results">İlgili bir film bulunamadı.</li>
+        <li class="no-results">No results according to your input.</li>
         {% endfor %}
       </ul>
       
       {%else%}
       <div class="container">
-  <h1 class="noneh1">Aradağınız filmle ilgili anahtar kelimeleri aramayı deneyin. </h1>
+  <h1 class="noneh1" style="color: #eee;">Try searching for keywords related to the movie you're looking for. </h1>
   </div>
   
   {%endif%}

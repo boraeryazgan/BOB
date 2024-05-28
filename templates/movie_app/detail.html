@@ -9,9 +9,11 @@
 
         /* Style for the bubble */
         #playlistBubble {
-            position: absolute;
+            position: relative;
+            z-index: 1;
             background-color: #fff;
             border: 1px solid #ccc;
+            margin-top: 0.5rem;
             padding: 10px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -27,6 +29,14 @@
         }
 #detailpage p{
     color:white !important;
+
+}
+#AddPlaylistButton{
+            background-color: #0d6efd;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
 }
     </style>
 {% endblock %}
@@ -116,7 +126,7 @@
                 {% for review in reviews %}
                     <div class="card mb-2">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <div style="color: #eee;" >{{ review.user.username }}
+                            <div >{{ review.user.username }}
                                 <span class="ms-2">
               <span class="{% if review.rate > 0 %}fas{% else %}far{% endif %} fa-star text-warning"></span>
               <span class="{% if review.rate > 1 %}fas{% else %}far{% endif %} fa-star text-warning"></span>
@@ -128,9 +138,9 @@
                             
                         </div>
                         <div class="card-body">
-                            <p style="color: #eee;" class="card-text">{{ review.comment }}</p>
+                            <p class="card-text">{{ review.comment }}</p>
                         </div>
-                        <div style="color: #eee;" class="text-end">
+                        <div class="text-end">
                             <small>{{ review.created_at }}</small>
                         </div>
                     </div>

@@ -4,7 +4,7 @@
 
     {% if user.is_authenticated %}
     <div class="welcome-message">
-        <p class="welcome-text">Hoş geldiniz, <span class="username">{{ user.username }}</span>!</p>
+        <p class="welcome-text">Welcome, <span class="username">{{ user.username }}</span>!</p>
         <p class="email">Email: {{ user.email }}</p>
     </div>
     {% else %}

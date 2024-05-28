@@ -24,7 +24,7 @@
     {%endblock%}
 </head>
 <body>
-    <header style="margin-bottom:1rem;" class="p-3 text-bg-dark">
+    <header style="margin-bottom:1rem;background-color: #1f2023" class="p-3">
         <div style="margin:0.6rem;" class="container">
           <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             <a href="{% url 'index'  %}" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
@@ -33,11 +33,11 @@
                                     </a>
     
               <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                  <li><a href="{% url 'index'  %}" class="btn btn-outline-light btn me-1">Home</a></li>
+                  <li><a href="{% url 'index'  %}" class="btn btn-outline-light btn navbar-button">Home</a></li>
                   {% if user.is_authenticated %}
-                    <li><a href="{% url 'recommend'  %}" class="btn btn-outline-light btn me-1">Recommended For You</a></li>
-                    <li><a href="{% url 'view_playlists'  %}" class="btn btn-outline-light btn me-1">Your Playlist</a></li>
-                    <a href="{% url 'profile_deneme'  %}" class="btn btn-outline-light me-2">Profile</a>
+                    <li><a href="{% url 'recommend'  %}" class="btn btn-outline-light btn navbar-button">Recommended For You</a></li>
+                    <li><a href="{% url 'view_playlists'  %}" class="btn btn-outline-light btn navbar-button">Your Playlist</a></li>
+                    <a href="{% url 'profile_deneme'  %}" class="btn btn-outline-light navbar-button">Profile</a>
                   {% endif %}
                   
               </ul>                                              
@@ -70,10 +70,10 @@
            
             <div class="text-end">
                 {% if user.is_authenticated %}
-                <a href="{% url 'logout' %}"><button type="button" class="btn btn-outline-light me-2">Logout</button></a>
+                <a href="{% url 'logout' %}"><button type="button" class="btn btn-outline-light navbar-button">Logout</button></a>
             {% else %}  
 
-                <a href="{% url 'login' %}"><button type="button" class="btn btn-outline-light me-2">Login</button></a>
+                <a href="{% url 'login' %}"><button type="button" class="btn btn-outline-light navbar-button">Login</button></a>
                 <a href="{% url 'signup' %}"> <button type="button" class="btn btn-warning">Sign-up</button></a>
                 {% endif %}
 

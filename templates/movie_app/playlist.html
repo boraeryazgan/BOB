@@ -12,7 +12,7 @@
     <div class="playlist-name">{{ playlist.title }}</div>
     <ul class="card-container">
         {% for serie in playlist.movies.all %}
-        <li  class="card">
+        <li  class="card" style="max-height: 420px;max-width: 300px" >
             <img loading="lazy" class="card-img-top" src="{{ serie.poster_link }}" alt="{{ serie.series_title }}">
             <div  class="card-body custom-card-body">
                 <div class="hiddenSorting">

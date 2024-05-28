@@ -34,7 +34,7 @@ def detail(request, serie_id):
         similar_series = list(similar_series)
     else:
         similar_series = []
-
+    user_playlists=None
     like_button_statement = None
     if request.user.is_authenticated:
         if Playlist.objects.filter(user=request.user, is_like_playlist=True).exists(): # If playlist exists

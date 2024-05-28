@@ -36,13 +36,13 @@
                   <li><a href="{% url 'index'  %}" class="btn btn-outline-light btn me-1">Home</a></li>
                   {% if user.is_authenticated %}
                     <li><a href="{% url 'recommend'  %}" class="btn btn-outline-light btn me-1">Recommended For You</a></li>
+                    <li><a href="{% url 'view_playlists'  %}" class="btn btn-outline-light btn me-1">Your Playlist</a></li>
+                    <a href="{% url 'profile_deneme'  %}" class="btn btn-outline-light me-2">Profile</a>
                   {% endif %}
                   
               </ul>                                              
             
-            {% if user.is_authenticated %}
-              <a href="{% url 'profile_deneme'  %}" class="btn btn-outline-light me-2">Profile</a>
-            {% endif %}
+            
            
             <form style="margin-right: 20px;" class="d-flex" action="{% url 'search' %}" method="post" role="search" onsubmit="return validateForm()">
               {% csrf_token %}

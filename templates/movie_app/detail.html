@@ -25,11 +25,13 @@
             border-radius: 5px;
             cursor: pointer;
         }
-
+#detailpage p{
+    color:white !important;
+}
     </style>
 {% endblock %}
 {% block content %}
-    <div style="margin-bottom:2rem;" class="container">
+    <div id="detailpage" style="margin-bottom:2rem;" class="container">
         <div class="row">
             <div class="col-lg-8">
                 <div class="embed-responsive embed-responsive-16by9 mb-4">
@@ -81,7 +83,7 @@
                             </form>
 
                         {% else %}
-                            <p>You must be logged in to create a playlist, <a href="{% url 'login' %}">Login</a></p>
+                            <p >You must be logged in to create a playlist, <a href="{% url 'login' %}">Login</a></p>
                         {% endif %}
                     </div>
 
@@ -114,7 +116,7 @@
                 {% for review in reviews %}
                     <div class="card mb-2">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <div class="fw-bold">{{ review.user.username }}
+                            <div style="color: #eee;" >{{ review.user.username }}
                                 <span class="ms-2">
               <span class="{% if review.rate > 0 %}fas{% else %}far{% endif %} fa-star text-warning"></span>
               <span class="{% if review.rate > 1 %}fas{% else %}far{% endif %} fa-star text-warning"></span>
@@ -123,12 +125,13 @@
               <span class="{% if review.rate > 4 %}fas{% else %}far{% endif %} fa-star text-warning"></span>
             </span>
                             </div>
-                            <div class="text-end">
-                                <small>{{ review.created_at }}</small>
-                            </div>
+                            
                         </div>
                         <div class="card-body">
-                            <p class="card-text">{{ review.comment }}</p>
+                            <p style="color: #eee;" class="card-text">{{ review.comment }}</p>
+                        </div>
+                        <div style="color: #eee;" class="text-end">
+                            <small>{{ review.created_at }}</small>
                         </div>
                     </div>
                 {% endfor %}
@@ -157,7 +160,7 @@
                     {% if user.is_authenticated %}
                         <button type="submit" class="btn btn-primary">Submit</button>
                     {% else %}
-                        <p>You must be logged in to post a review, <a href="{% url 'login' %}">Login</a></p>
+                        <p style="color: #eee;">You must be logged in to post a review, <a href="{% url 'login' %}">Login</a></p>
                     {% endif %}
                 </form>
             </div>

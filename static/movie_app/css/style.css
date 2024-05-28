@@ -33,8 +33,15 @@
     .text-end {
         margin-top: 10px;
     }
+   
 }
+@media (min-width: 992px) {
 
+.card{
+    max-height: 400px;
+    max-width: 270px;
+}
+}
 .custom-card-body {
     position: absolute;
     bottom: 0;
@@ -344,4 +351,5 @@ body {
     background-color: #000000; /* Set background color to black on hover */
     color: #ffffff; /* Set text color to white on hover */
 }
+
 

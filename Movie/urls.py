@@ -13,5 +13,5 @@ urlpatterns = [
     path('add_to_liked_list/',add_to_liked_list,name='add_to_liked_list'),
     path('add_to_playlist/', add_to_playlist, name='add_to_playlist'),
     path('playlists/', view_playlists, name='view_playlists'),
-    path('profile_deneme/', profile_deneme, name='profile_deneme'),
+    path('profile/', profile_deneme, name='profile_deneme'),
 ]

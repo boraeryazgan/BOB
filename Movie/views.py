@@ -253,6 +253,7 @@ def profile(request):
     
 @login_required
 def profile_deneme(request):
-    return render(request, 'movie_app/profile_deneme.html')
+    playlists = Playlist.objects.filter(user=request.user)
+    return render(request, 'movie_app/profile_deneme.html',{"playlists":playlists})
 
 

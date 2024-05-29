@@ -135,6 +135,7 @@
                             <div id="Playlists"  style="display: none;width: 100%">
                                 <h1>Playlists</h1>
                             <hr>
+                                {% if playlists %}
                                 <ul  style="padding-left: 0">
                                     {% for playlist in playlists %}
                                         <h1>{{ playlist.title }}</h1>
@@ -162,6 +163,9 @@
                                         </ul>
                                     {% endfor %}
                                 </ul>
+                                {% else %}
+                                    <h3 style="color: #eee">You Don't Have Any Playlist </h3>
+                            {% endif %}
                                 <style>
                                     .huge-btn {
                                         font-size: 40px;

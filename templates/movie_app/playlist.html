@@ -24,7 +24,7 @@
                 <p class="card-text">Genre: {{ serie.genre }}</p>
                 <p class="card-text">IMDB Rating: {{ serie.imdb_rating }}</p>
                 <p class="card-text">Overview: {{ serie.overview }}</p>
-                <a href="{% url 'detail' serie.id %}" class="btn btn-watch-trailer">Watch Trailer</a>
+                <a href="{% url 'detail' serie.id %}" style="color:#eee;" class="btn btn-watch-trailer">Watch Trailer</a>
             </div>
             <a  href="{% url 'detail' serie.id %}" class="link-overlay"></a>
         </li>

@@ -36,8 +36,7 @@
                   <li><a href="{% url 'index'  %}" class="btn btn-outline-light btn navbar-button">Home</a></li>
                   {% if user.is_authenticated %}
                     <li><a href="{% url 'recommend'  %}" class="btn btn-outline-light btn navbar-button">Recommended For You</a></li>
-                    <li><a href="{% url 'view_playlists'  %}" class="btn btn-outline-light btn navbar-button">Your Playlist</a></li>
-                    <a href="{% url 'profile_deneme'  %}" class="btn btn-outline-light navbar-button">Profile</a>
+                    <a href="{% url 'profile_deneme'  %}" class="btn btn-outline-light navbar-button">Your Profile</a>
                   {% endif %}
                   
               </ul>                                              
